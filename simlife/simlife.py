@@ -2,6 +2,41 @@
 # vim: set fileencoding=utf-8:
 
 
+def tick(grid):
+    """Compute the next generation of the universe.
+
+    Live cells with fewer than two or more than three live neighbors die, and
+    live cells with two or three live neighbors survive.
+
+    Dead cells with exactly three live neighbors become live.
+
+    Parameters
+    ----------
+    grid : set of tuple of int
+        A unique, unordered collection of the row and column coordinates of the
+        live cells in the universe.
+
+    Returns
+    -------
+    set of tuple of int
+        A unique, unordered collections of the row and column coordinates of
+        the live cells in the newly computed generation.
+
+    """
+    _grid = set()
+    watch = set()
+    for live_cell in grid:
+        ns = neighbors(live_cell)
+        watch = watch.union({n for n in ns if n not in grid})
+        if population(grid, ns) == 2 or population(grid, ns) == 3:
+            _grid.add(live_cell)
+    for dead_cell in watch:
+        ns = neighbors(dead_cell)
+        if population(grid, ns) == 3:
+            _grid.add(dead_cell)
+    return _grid
+
+
 def neighbors(cell):
     """Get a cell's neighbors.
 
@@ -17,14 +52,6 @@ def neighbors(cell):
     -------
     iterable of tuple of int
         The row and column coordinates of `cell`'s eight neighbors.
-
-    Examples
-    --------
-    >>> neighbors((2, 5))
-    [(1, 4), (1, 5), (1, 6), (2, 4), (2, 6), (3, 4), (3, 5), (3, 6)]
-
-    >>> neighbors((-1, 2))
-    [(-2, 1), (-2, 2), (-2, 3), (-1, 1), (-1, 3), (0, 1), (0, 2), (0, 3)]
 
     """
     row, col = cell
@@ -51,24 +78,9 @@ def population(grid, cells):
     int
         The number of live cells in `cells`.
 
-    Examples
-    --------
-    >>> g = {(1, 3), (2, 4), (3, 2), (3, 3), (3, 4)}
-
-    >>> cs1 = [(1, 2), (1, 3), (1, 4), (2, 2), (2, 4), (3, 2), (3, 3), (3, 4)]
-
-    >>> cs2 = [(-1, 0), (0, 0), (1, 0)]
-
-    >>> population(g, cs1)
-    5
-
-    >>> population(g, cs2)
-    0
-
     """
     return sum([1 for c in cells if c in grid])
 
 
 if __name__ == '__main__':
-    import doctest
-    doctest.testmod()
+    pass
