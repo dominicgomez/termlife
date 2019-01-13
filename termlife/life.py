@@ -1,5 +1,6 @@
-#!/usr/bin/env python3
-# vim: set fileencoding=utf-8:
+__all__ = ['Grid']
+__version__ = '1.0.0'
+__author__ = 'Dominic Gomez'
 
 
 class Grid:
