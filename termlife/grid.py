@@ -19,12 +19,15 @@ class Grid:
     gens : list of set of tuple of int
         An ordered collection of unique, unordered collections of the row and
         column coordinates of the live cells in each generation of the
-        universe. Indexed by the generation of the population.
+        universe. Indexed by the generation of the count_live_cells.
 
     """
 
     def __init__(self, seed):
         self.gens = [set(seed)]
+
+    def __eq__(self, other):
+        return self.gens[-1] == other.gens[-1]
 
     def __str__(self):
         return str(self.gens[-1])
@@ -40,17 +43,18 @@ class Grid:
         grid = set()
         watch = set()
         for live_cell in self.gens[-1]:
-            ns = self.neighbors(live_cell)
+            ns = self.get_neighbors(live_cell)
             watch = watch.union({n for n in ns if n not in self.gens[-1]})
-            if self.population(ns) == 2 or self.population(ns) == 3:
+            num_live_cells = self.count_live_cells(ns)
+            if num_live_cells == 2 or num_live_cells == 3:
                 grid.add(live_cell)
         for dead_cell in watch:
-            ns = self.neighbors(dead_cell)
-            if self.population(ns) == 3:
+            ns = self.get_neighbors(dead_cell)
+            if self.count_live_cells(ns) == 3:
                 grid.add(dead_cell)
         self.gens.append(grid)
 
-    def population(self, cells):
+    def count_live_cells(self, cells):
         """Count the live cells.
 
         Parameters
@@ -67,7 +71,7 @@ class Grid:
         return sum([1 for c in cells if c in self.gens[-1]])
 
     @staticmethod
-    def neighbors(cell):
+    def get_neighbors(cell):
         """Get a cell's neighbors.
 
         Every cell has exactly eight neighbors, which are the cells
@@ -86,8 +90,8 @@ class Grid:
 
         """
         row, col = cell
-        return [
+        return {
             (row+row_offset, col+col_offset)
             for row_offset in range(-1, 2) for col_offset in range(-1, 2)
             if (row_offset, col_offset) != (0, 0)
-        ]
+        }
