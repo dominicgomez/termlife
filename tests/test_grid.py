@@ -4,7 +4,7 @@
 
 import unittest
 
-from grid import Grid
+from termlife.grid import Grid
 
 
 class GridTestCase(unittest.TestCase):
