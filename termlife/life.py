@@ -42,7 +42,7 @@ def tick(grid):
 def _nbors(cell):
     # Get a cell's eight neighbors.
     r, c = cell
-    return [
+    return {
         (r-1, c-1),     # NW
         (r-1, c),       # N
         (r-1, c+1),     # NE
@@ -51,7 +51,7 @@ def _nbors(cell):
         (r+1, c-1),     # SW
         (r+1, c),       # S
         (r+1, c+1)      # SE
-    ]
+    }
 
 
 def _numlive(grid, cells):
