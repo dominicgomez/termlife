@@ -18,7 +18,7 @@ class Widget(ABC):
         ``curses.newwin()``, etc.
     img: str
         An image of the widget in ASCII art.
-    pos: tuple(int, int), optional(default=(0, 0))
+    pos: tuple(int, int) or str
         The initial coordinates of the top-left corner of the widget on its
         parent window.
 
@@ -30,20 +30,38 @@ class Widget(ABC):
         ``curses.newwin()``, etc.
     img: str
         An image of the widget in ASCII art.
+    h: int
+        The height of the widget.
+    w: int
+        The width of the widget.
     pos: tuple(int, int)
-        The initial coordinates of the top-left corner of the widget on its
-        parent window.
+        The coordinates of the top-left corner of the widget on its parent
+        window.
+    win: Window
+
     visible: bool
         Whether the widget is visible.
 
     """
+    # TOP_LEFT = 0
+    # TOP_CENTER = 0
+    # TOP_RIGHT = 0
+    # CENTER_LEFT = 0
+    # CENTER = 0
+    # CENTER_RIGHT = 0
+    # BOTTOM_LEFT = 0
+    # BOTTOM_CENTER = 0
+    # BOTTOM_RIGHT = 0
+
     @abstractmethod
-    def __init__(self, parent, img, pos=(0, 0)):
+    def __init__(self, parent, img, pos, visible=True):
         self.parent = parent
         self.img = img
-        self.pos = pos
-        self.visible = True
-        self._win = None
+        self.h = len(self.img.split('\n'))
+        self.w = max(len(line) for line in self.img.split('\n'))
+        self.ypos, self.xpos = pos
+        self.win = self.parent.derwin(self.h+1, self.w, self.ypos, self.xpos)
+        self.visible = visible
         # self.h, self.w = self._get_sz()
         # self.pos = self._set_pos(pos)
         # Writing to the last column of the last line of the terminal causes
@@ -66,14 +84,3 @@ class Widget(ABC):
     def render(self):
         """Draw the widget on the screen."""
         pass
-
-    @property
-    def win(self):
-        try:
-            return self._win
-        except AttributeError:
-            pass
-
-    @win.setter
-    def win(self, value):
-        self._win = value

@@ -2,9 +2,8 @@ from widget import Widget
 
 
 class Label(Widget):
-    def __init__(self, parent, text, pos=(0, 0)):
-        super(Label, self).__init__(parent, text, pos)
-        self.win = self.parent.derwin(2, len(self.img), *self.pos)
+    def __init__(self, parent, text, pos, visible=True):
+        super(Label, self).__init__(parent, text, pos, visible)
 
     def on_input(self, key):
         pass
