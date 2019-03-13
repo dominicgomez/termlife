@@ -1,8 +1,14 @@
+"""Widgets for curses interfaces.
+
+THIS CLASS CANNOT BE INSTANTIATED. It only outlines and documents the
+components necessary to derive an instantiable widget class.
+
+"""
 from abc import ABC, abstractmethod
 
 
 class Widget(ABC):
-    """A GUI-like component for curses programs.
+    """A GUI-like component for curses interfaces.
 
     Parameters
     ----------
