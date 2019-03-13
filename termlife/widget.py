@@ -1,8 +1,9 @@
-import abc
 import re
 
+from abc import ABC, abstractmethod
 
-class Widget((abc.ABC)):
+
+class Widget(ABC):
     """A GUI-like component for curses programs.
 
     Parameters
@@ -40,7 +41,7 @@ class Widget((abc.ABC)):
         Whether the widget is visible.
 
     """
-    @abc.abstractmethod
+    @abstractmethod
     def __init__(self, parent, img, pos=None):
         self.parent = parent
         self.img = [line for line in img.split('\n') if line.strip()]
@@ -87,7 +88,7 @@ class Widget((abc.ABC)):
     def hide(self):
         self.visible = False
 
-    @abc.abstractmethod
+    @abstractmethod
     def oninput(self, key):
         pass
 
@@ -107,6 +108,6 @@ class Widget((abc.ABC)):
     def unhide(self):
         self.visible = True
 
-    @abc.abstractmethod
+    @abstractmethod
     def update(self):
         pass
