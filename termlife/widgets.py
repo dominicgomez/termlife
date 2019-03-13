@@ -10,3 +10,11 @@ class Label((widget.Widget)):
 
     def update(self):
         pass
+
+    def render(self):
+        if self.visible:
+            self.win.addstr(0, 0, '\n'.join(self.img))
+        else:
+            self.win.erase()
+
+        self.win.refresh()

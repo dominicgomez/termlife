@@ -13,11 +13,11 @@ def main(stdscr):
     testlabel.render()
 
     stdscr.getkey()
-    testlabel.hide()
+    testlabel.visible = False
     testlabel.render()
 
     stdscr.getkey()
-    testlabel.unhide()
+    testlabel.visible = True
     testlabel.render()
 
     stdscr.getkey()

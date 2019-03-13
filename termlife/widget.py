@@ -46,9 +46,10 @@ class Widget(ABC):
     @abstractmethod
     def __init__(self, parent, img, pos=None):
         self.parent = parent
-        self.img = [line for line in img.split('\n') if line.strip()]
-        self.height, self.width = self.getsize()
-        self.pos = self.setpos(pos)
+        self.img = img.split('\n')
+        self.height = len(self.img)
+        self.width = max(len(line) for line in self.img)
+        self.pos = self._setpos(pos)
         # Typing on the last column of the last line of the terminal causes the
         # cursor to advance off screen, resulting in error. To avoid this, the
         # label window is 1 row of terminal cells taller than the widget it
@@ -56,61 +57,34 @@ class Widget(ABC):
         self.win = self.parent.derwin(self.height+1, self.width, *self.pos)
         self.visible = True
 
-    def align(self, alignment):
-        if alignment == 'centertop':
-            return (0, self.centerx())
-        elif alignment == 'centerleft':
-            return (self.centery(), 0)
-        elif alignment == 'center':
-            return self.center()
-        elif alignment == 'centerright':
-            _, pwidth = self.parent.getmaxyx()
-            return (self.centery(), pwidth-self.width)
-        elif alignment == 'centerbottom':
-            pheight, _ = self.parent.getmaxyx()
-            return (pheight-self.height, self.centerx())
-        else:
-            pass
-
-    def center(self):
-        return (self.centery(), self.centerx())
-
-    def centery(self):
-        pheight, _ = self.parent.getmaxyx()
-        return (pheight-self.height)//2
-
-    def centerx(self):
-        _, pwidth = self.parent.getmaxyx()
-        return (pwidth-self.width)//2
-
-    def getsize(self):
-        return (len(self.img), max(len(line) for line in self.img))
-
-    def hide(self):
-        self.visible = False
-
     @abstractmethod
     def oninput(self, key):
         pass
 
-    def render(self):
-        if self.visible:
-            self.win.addstr(0, 0, '\n'.join(self.img))
-        else:
-            self.win.erase()
-        self.win.refresh()
+    @abstractmethod
+    def update(self):
+        pass
 
-    def setpos(self, pos):
+    @abstractmethod
+    def render(self):
+        pass
+
+    def _setpos(self, pos):
         if isinstance(pos, str):
-            return self.align(pos)
+            if pos == 'center':
+                return self._center()
+            else:
+                pass
         elif isinstance(pos, tuple):
             return pos
         else:
             return (0, 0)
 
-    def unhide(self):
-        self.visible = True
+    def _center(self):
+        return (self._centery(), self._centerx())
 
-    @abstractmethod
-    def update(self):
-        pass
+    def _centery(self):
+        return (self.parent.getmaxyx()[0]-self.height)//2
+
+    def _centerx(self):
+        return (self.parent.getmaxyx()[1]-self.width)//2
