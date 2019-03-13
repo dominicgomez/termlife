@@ -9,7 +9,7 @@ import widgets
 def main(stdscr):
     stdscr.clear()
 
-    testlabel = widgets.Label(stdscr, 'Dominic Gomez', 'center')
+    testlabel = widgets.Label(stdscr, 'Dominic Gomez')
     testlabel.render()
 
     stdscr.getkey()
