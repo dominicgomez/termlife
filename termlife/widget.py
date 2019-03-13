@@ -55,7 +55,7 @@ class Widget(ABC):
         self.visible = True
 
     @abstractmethod
-    def oninput(self, key):
+    def on_input(self, key):
         pass
 
     @abstractmethod

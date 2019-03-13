@@ -5,7 +5,7 @@ class Label(Widget):
     def __init__(self, parent, text, pos=None):
         super(Label, self).__init__(parent, text, pos)
 
-    def oninput(self, key):
+    def on_input(self, key):
         pass
 
     def update(self):
