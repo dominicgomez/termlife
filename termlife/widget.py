@@ -1,5 +1,3 @@
-import re
-
 from abc import ABC, abstractmethod
 
 
@@ -30,13 +28,11 @@ class Widget(ABC):
         The height of the widget.
     width: int
         The width of the widget.
-    cover: str
-        `img`
     pos: tuple(int, int)
-        The (y, x) coordinates of the widget's top-left corner relative to its
-        parent window.
+        The coordinates of the top-left corner of the widget on its parent
+        window.
     win: Window
-        The
+        The window (in the parent window) on which the widget is drawn.
     visible: bool
         Whether the widget is visible.
 
@@ -45,7 +41,6 @@ class Widget(ABC):
     def __init__(self, parent, img, pos=None):
         self.parent = parent
         self.img = [line for line in img.split('\n') if line.strip()]
-        self.cover = [re.sub(r'\S', ' ', line) for line in self.img]
         self.height, self.width = self.getsize()
         self.pos = self.setpos(pos)
         # Typing on the last column of the last line of the terminal causes the
@@ -93,8 +88,10 @@ class Widget(ABC):
         pass
 
     def render(self):
-        img = self.img if self.visible else self.cover
-        self.win.addstr(0, 0, '\n'.join(img))
+        if self.visible:
+            self.win.addstr(0, 0, '\n'.join(self.img))
+        else:
+            self.win.erase()
         self.win.refresh()
 
     def setpos(self, pos):
