@@ -19,6 +19,9 @@ class Label(Widget):
 
         self.win.refresh()
 
+    def _get_sz(self):
+        return (1, len(self.img))
+
 # class PlainText(ABC, Widget):
 #     @abstractmethod
 #     def __init__(self, parent, text, pos=None):
