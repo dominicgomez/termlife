@@ -30,10 +30,6 @@ class Widget(ABC):
         ``curses.newwin()``, etc.
     img: str
         An image of the widget in ASCII art.
-    height: int
-        The height of the widget.
-    width: int
-        The width of the widget.
     pos: tuple(int, int)
         The coordinates of the top-left corner of the widget on its parent
         window.
@@ -44,12 +40,12 @@ class Widget(ABC):
 
     """
     @abstractmethod
-    def __init__(self, parent, img, pos=None):
+    def __init__(self, parent, img, pos=(0, 0)):
         self.parent = parent
-        self.img = img.split('\n')
-        self.height = len(self.img)
-        self.width = max(len(line) for line in self.img)
-        self.pos = self._setpos(pos)
+        self.img = img
+        self.height = len(self.img.split('\n'))
+        self.width = max(len(line) for line in self.img.split('\n'))
+        self.pos = self._pos(pos)
         # Typing on the last column of the last line of the terminal causes the
         # cursor to advance off screen, resulting in error. To avoid this, the
         # label window is 1 row of terminal cells taller than the widget it
@@ -69,22 +65,26 @@ class Widget(ABC):
     def render(self):
         pass
 
-    def _setpos(self, pos):
+    def _pos(self, pos):
         if isinstance(pos, str):
             if pos == 'center':
                 return self._center()
+            elif pos == 'topcenter':
+                return (0, self._xcenter())
             else:
                 pass
         elif isinstance(pos, tuple):
-            return pos
+            return tuple
         else:
-            return (0, 0)
+            pass
 
     def _center(self):
-        return (self._centery(), self._centerx())
+        return (self._ycenter(), self._xcenter())
 
-    def _centery(self):
-        return (self.parent.getmaxyx()[0]-self.height)//2
+    def _ycenter(self):
+        parent_height, _ = self.parent.getmaxyx()
+        return (parent_height-self.height)//2
 
-    def _centerx(self):
-        return (self.parent.getmaxyx()[1]-self.width)//2
+    def _xcenter(self):
+        _, parent_width = self.parent.getmaxyx()
+        return (parent_width-self.width)//2
