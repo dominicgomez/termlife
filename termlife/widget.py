@@ -17,7 +17,7 @@ class Widget(ABC):
         An image of the widget in ASCII art.
     pos: tuple(int, int):
         The coordinates of the top-left corner of the widget.
-    visible: bool, optional(default=True)
+    visible: bool
         Whether the widget is visible.
 
     Attributes
@@ -41,7 +41,7 @@ class Widget(ABC):
         that update after a certain amount of time (for flashing, for example).
 
     """
-    def __init__(self, parent, img, pos, visible=True):
+    def __init__(self, parent, img, pos, visible):
         self.parent = parent
         self.img = img
 
