@@ -1,53 +1,194 @@
 """GUI-like components for curses interfaces."""
 # import curses
 
-from widget import Widget
+from _widget import _Widget
 
 
-class Grid(Widget):
-    def __init__(self, parent, rows, cols, pos, visible=True):
+class Frame(_Widget):
+    """A rectangular region of the screen.
+
+    Attributes
+    ----------
+
+    """
+    def __init__(self, parent, **opts):
+        self.parent = parent
+        self.height = opts['height'] or self.parent.getmaxyx()[0]
+        self.width = opts['width'] or self.parent.getmaxyx()[1]
+
+
+class DialogBox(Frame):
+    """Display multiple lines of text.
+
+    Attributes
+    ----------
+
+    """
+    def __init__(self, parent, **opts):
         pass
 
-    def on_input(self, key):
-        pass
 
-    def update(self):
-        pass
-
-    def render(self):
+class MessageBox(DialogBox):
+    def __init__(self, parent, **opts):
         pass
 
 
-class Label(Widget):
-    def __init__(self, parent, text, pos, visible=True):
-        # `_height` and `_width` must be set before calling the parent class's
-        # ``__init__`` method.
-        super(Label, self).__init__(parent, text, pos, visible)
+class Grid(_Widget):
+    """Display multiple lines of text.
 
-    def on_input(self, key):
+    Attributes
+    ----------
+
+    """
+    def __init__(self, parent, **opts):
         pass
 
-    def update(self):
+
+class List(Grid):
+    """Display multiple lines of text.
+
+    Attributes
+    ----------
+
+    """
+    def __init__(self, parent, **opts):
         pass
 
-    def render(self):
-        if self.visible:
-            self.win.addstr(*self.pos, self.img)
-        else:
-            self.win.erase()
 
-        self.win.refresh()
+class Menu(List):
+    """Display multiple lines of text.
 
+    Attributes
+    ----------
 
-class Menu(Widget):
-    def __init__(self, parent, img, pos, visible=True):
+    """
+    def __init__(self, parent, **opts):
         pass
 
-    def on_input(self, key):
+
+class TextBox(_Widget):
+    """Display multiple lines of text.
+
+    Attributes
+    ----------
+
+    """
+    def __init__(self, parent, **opts):
         pass
 
-    def update(self):
+
+class TextLabel(TextBox):
+    """Display one line of text.
+
+    Attributes
+    ----------
+
+    """
+    def __init__(self, parent, **opts):
         pass
 
-    def render(self):
+
+class ListItem(TextLabel):
+    """Display multiple lines of text.
+
+    Attributes
+    ----------
+
+    """
+    def __init__(self, parent, **opts):
         pass
+
+
+class ButtonGroup(_Widget):
+    """Display multiple lines of text.
+
+    Attributes
+    ----------
+
+    """
+    def __init__(self, parent, **opts):
+        pass
+
+
+class RadioButtonGroup(ButtonGroup):
+    """Display multiple lines of text.
+
+    Attributes
+    ----------
+
+    """
+    def __init__(self, parent, **opts):
+        pass
+
+
+class Button(_Widget):
+    """Display multiple lines of text.
+
+    Attributes
+    ----------
+
+    """
+    def __init__(self, parent, **opts):
+        self.action = opts['action']
+
+
+class CheckBox(Button):
+    """Display multiple lines of text.
+
+    Attributes
+    ----------
+
+    """
+    def __init__(self, parent, **opts):
+        pass
+
+
+class RadioButton(Button):
+    """Display multiple lines of text.
+
+    Attributes
+    ----------
+
+    """
+    def __init__(self, parent, **opts):
+        pass
+
+
+# class Menu(List):
+#     def __init__(self, parent, **opts):
+#         pass
+
+#     def on_input(self, key):
+#         pass
+
+#     def update(self):
+#         pass
+
+#     def render(self):
+#         if self.visible:
+#             self.win.addstr(*self.pos, self.img)
+
+#     def _img(self, options, selector, selected, align):
+#         return '+-----+\n|     |\n+-----+'
+
+
+# class Label(_Widget):
+#     # def __init__(self, parent, **opts):
+#     #     pass
+
+#     def __init__(self, parentent, text, pos, visible=True):
+#         super(Label, self).__init__(parentent, text, pos, visible)
+
+#     def on_input(self, key):
+#         pass
+
+#     def update(self):
+#         pass
+
+#     def render(self):
+#         if self.visible:
+#             self.win.addstr(*self.pos, self.img)
+#         else:
+#             self.win.erase()
+
+#         self.win.refresh()
